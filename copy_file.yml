@@ -1,0 +1,11 @@
+---
+- name: testplaybook
+  hosts: all
+  become: true
+  tasks:
+  - name: copy file
+    copy:
+      src: /home/anadmin/index.html
+      dest: /home/anadmin
+      mode: 0600
+      owner: akash

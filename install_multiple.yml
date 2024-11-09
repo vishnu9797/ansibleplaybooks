@@ -1,0 +1,9 @@
+---
+- name: test
+  hosts: all
+  become: true
+  tasks:
+  - name: installing packages
+    yum:
+      name: ['git', 'gcc', 'tree', 'which', 'wget','docker*']
+      state: installed

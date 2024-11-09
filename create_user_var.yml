@@ -1,0 +1,11 @@
+---
+- name: test
+  hosts: all
+  become : true
+  vars:
+    user: ajay
+  tasks:
+  - name: create user {{user}}
+    user:
+      name: "{{user}}"
+

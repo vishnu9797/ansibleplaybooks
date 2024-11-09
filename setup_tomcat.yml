@@ -1,0 +1,43 @@
+---
+- name: playbook for tomcat
+  hosts: all
+  become: true
+  vars:
+    tomcat_version: 11.0.0
+
+  tasks:
+  - name: install java in RedHat
+    yum: 
+      name: java
+      state: installed
+    when: ansible_os_family == "RedHat"
+
+  - name: install java in Debian
+    apt:
+      name: default-jdk
+      state: present
+    when: ansible_os_family == "Debian"
+
+  - name: download tomcat package
+    get_url:
+      url: https://dlcdn.apache.org/tomcat/tomcat-11/v{{ tomcat_version }}/bin/apache-tomcat-{{ tomcat_version }}.tar.gz
+      dest: /opt
+
+  - name: untar package
+    unarchive:
+      src: /opt/apache-tomcat-{{ tomcat_version }}.tar.gz
+      dest: /opt
+      remote_src: yes
+
+  - name: add permission to startup.sh file
+    file:
+      path: /opt/apache-tomcat-{{ tomcat_version }}/bin/startup.sh
+      mode: 0777
+
+  - name: start tomcat services
+    shell: nohup ./startup.sh
+    args:
+      chdir: /opt/apache-tomcat-{{ tomcat_version }}/bin
+
+
+
